@@ -24,10 +24,12 @@ inputs, targets = make_chunks(token_ids, max_lenght=256, stride=256)
 dataset = TensorDataset(inputs, targets)
 loader = DataLoader(dataset, batch_size=4, shuffle=True, drop_last=True)
 
+
 x, y = next(iter(loader))
-print(x[0, :10])                          # 10 token IDs
-print(tokenizer.decode(x[0, :10].tolist()))  # the text they represent
-print(tokenizer.decode(y[0, :10].tolist()))
+print(x[1, :10])
+print(tokenizer.decode(x[1, :10].tolist()))  
+print(tokenizer.decode(x[2, :10].tolist()))  # the text they represent
+print(tokenizer.decode(y[1, :10].tolist()))
 
 # GPT_CONFIG_124M ={
 #     "vocab_size": 50257, 
