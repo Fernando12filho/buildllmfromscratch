@@ -59,6 +59,15 @@ print("\nInputs shape: \n", inputs.shape)
 token_embeddings = token_embedding_layer(inputs)
 print(token_embeddings.shape) # The 8 × 4 × 256–dimensional tensor output shows that each token ID is now embed-ded as a 256-dimensional vector
 
+# absolute embedding approach 
+context_length = max_length
+pos_embedding_layer = torch.nn.Embedding(context_length, output_dim)
+pos_embeddings = pos_embedding_layer(torch.arange(context_length))
+print(pos_embeddings.shape)
+input_embeddings = token_embeddings + pos_embeddings
+print(input_embeddings.shape)
+
+
 
 
 
