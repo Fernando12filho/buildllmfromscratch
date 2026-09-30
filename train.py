@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import tiktoken
-import numpy
 from torch.utils.data import TensorDataset, DataLoader
 
 
@@ -23,13 +22,44 @@ inputs, targets = make_chunks(token_ids, max_lenght=256, stride=256)
 
 dataset = TensorDataset(inputs, targets)
 loader = DataLoader(dataset, batch_size=4, shuffle=True, drop_last=True)
-
-
+tok_emb = nn.Embedding(50257, 768)
+pos_emb = nn.Embedding(256,768)
+ 
 x, y = next(iter(loader))
-print(x[1, :10])
-print(tokenizer.decode(x[1, :10].tolist()))  
-print(tokenizer.decode(x[2, :10].tolist()))  # the text they represent
-print(tokenizer.decode(y[1, :10].tolist()))
+
+tok_vec = tok_emb(x) 
+pos_vec = pos_emb(torch.arange(256))
+inp_vec = tok_vec + pos_vec
+
+# print(inp_vec)
+
+# dot product multiply two vectors and add their values 
+## first step its to compute the intermediate values W(letra grega), attention scores
+seq = inp_vec[0]
+query = seq[1]
+# print("Query is: ", query)
+attn_scores_2 = torch.empty(seq.shape[0])
+print("Attention score shape is: ", seq.shape[0])
+print("Attention score is: ", attn_scores_2)
+for i, x_i in enumerate(seq):
+     attn_scores_2[i] = torch.dot(x_i, query)
+
+print("Attention score shape is (After for loop): ", inputs.shape[0])
+print("Attention score is (After for loop): ", attn_scores_2)
+# print("Computing the intermediate values")
+# print(attn_scores_2)
+
+# attn_weights_2_tmp = attn_scores_2 / attn_scores_2.sum()
+# print("Attention weights: ", attn_weights_2_tmp)
+# print("Sum: ", attn_weights_2_tmp.sum())
+
+def softmax_naive(x):
+    return torch.exp(x) / torch.exp(x).sum(dim=0)
+
+attn_weights_2 = torch.softmax(attn_scores_2, dim=0)
+print("Attention weights: ", attn_weights_2)
+print("Sum: ", attn_weights_2.sum())
+
 
 # GPT_CONFIG_124M ={
 #     "vocab_size": 50257, 
