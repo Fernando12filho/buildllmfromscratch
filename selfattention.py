@@ -12,6 +12,7 @@ inputs = torch.tensor(
 ## first step its to compute the intermediate values W(letra grega), attention scores
 query = inputs[1]
 attn_scores_2 = torch.empty(inputs.shape[0])
+print(inputs.shape[0])
 for i, x_i in enumerate(inputs):
     attn_scores_2[i] = torch.dot(x_i, query)
 print("Computing the intermediate values")
