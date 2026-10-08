@@ -1,0 +1,8 @@
+# Scrapers: standard library + certifi (CA certificates for HTTPS on macOS python.org builds).
+certifi>=2024.2.2
+
+# Needed from the tokenizer step onward.
+torch>=2.2          # on the desktop, install the CUDA build from pytorch.org
+tokenizers>=0.15    # Hugging Face fast BPE trainer (used by tokenizer/train_tokenizer.py)
+numpy>=1.26         # train.bin / val.bin memmaps
+tqdm>=4.66          # progress bars

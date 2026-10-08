@@ -83,6 +83,7 @@ if __name__ == "__main__":
     d_in, d_out = EMB_DIM, 64
     torch.manual_seed(123)
     ca = CausalAttention(d_in, d_out, CONTEXT_LENGTH, 0.0)
+    print(ca(inputs))
 
     all_context_vecs = []
     for x, y in loader:                                      # 5 batches; x and y are [4, 256] token IDs

@@ -1,0 +1,33 @@
+# Small model: ~30M parameters. Trains on an M3 (16 GB) or any 8 GB+ NVIDIA GPU.
+# Copy this file (e.g. configs/medium.toml) to experiment; pass it with --config.
+
+[paths]
+raw_dir       = "data/raw"
+interim_dir   = "data/interim"
+processed_dir = "data/processed"
+tokenizer     = "data/processed/tokenizer.json"
+checkpoints   = "checkpoints"
+
+[tokenizer]
+vocab_size = 16000      # Portuguese-only corpus: 16k is plenty; GPT-2 uses 50257
+
+[model]
+context_length = 256    # tokens the model sees at once; raise to 512+ on the desktop GPU
+emb_dim        = 384
+n_heads        = 6      # emb_dim must be divisible by n_heads
+n_layers       = 6
+dropout        = 0.1
+qkv_bias       = false
+
+[train]
+device        = "auto"  # "auto" | "cuda" | "mps" | "cpu"
+batch_size    = 32
+grad_accum    = 1       # effective batch = batch_size * grad_accum
+lr            = 3e-4
+weight_decay  = 0.1
+warmup_steps  = 200
+max_steps     = 20000
+eval_interval = 500     # steps between validation-loss checks
+eval_iters    = 50      # batches averaged per validation check
+save_interval = 1000
+seed          = 1337

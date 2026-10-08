@@ -1,0 +1,17 @@
+# Data and weights are large and reproducible — never commit them.
+data/
+checkpoints/
+*.bin
+*.pt
+*.safetensors
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
