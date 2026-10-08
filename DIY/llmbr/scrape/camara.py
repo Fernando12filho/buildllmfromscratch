@@ -31,11 +31,37 @@ def paginate(url: str, params: dict):
     """Yield every item across all pages, following the API's rel="next" links."""
     params = {**params, "itens": PAGE_SIZE, "pagina": 1}
     while True:
-        payload = get_json(url, params)
+        try:
+            payload = get_json(url, params)
+        except RuntimeError:
+            # A single broken record can make the API return HTTP 500 for the whole
+            # page, every time (seen on deputy 204572, page 5). Re-fetch that page
+            # one item at a time and skip only the item(s) that keep failing.
+            yield from page_item_by_item(url, params)
+            params["pagina"] += 1
+            continue
         yield from payload["dados"]
         if not any(link["rel"] == "next" for link in payload.get("links", [])):
             return
         params["pagina"] += 1
+
+
+def page_item_by_item(url: str, params: dict):
+    """Yield the items of one failed page by requesting pages of size 1.
+
+    Page p of size N holds items (p-1)*N+1 .. p*N, and with itens=1 item k is
+    simply page k. An empty page means we ran past the end of the list.
+    """
+    first = (params["pagina"] - 1) * params["itens"] + 1
+    for k in range(first, first + params["itens"]):
+        try:
+            items = get_json(url, {**params, "itens": 1, "pagina": k}, retries=2)["dados"]
+        except RuntimeError:
+            print(f"  ! skipping item {k}: the API keeps failing on it", flush=True)
+            continue
+        if not items:
+            return
+        yield from items
 
 
 def legislature_dates(leg_id: int) -> tuple[str, str]:
