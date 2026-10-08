@@ -67,7 +67,7 @@ def scrape_legislature(leg_id: int, out_dir: Path, max_deputados: int | None) ->
 
     start, end = legislature_dates(leg_id)
     deputies = list_deputies(leg_id)[:max_deputados]
-    print(f"Legislatura {leg_id} ({start} → {end}): {len(deputies)} deputies, "
+    print(f"Legislatura {leg_id} ({start} to {end}): {len(deputies)} deputies, "
           f"{len(done)} already done")
 
     total = 0
@@ -99,13 +99,13 @@ def scrape_legislature(leg_id: int, out_dir: Path, max_deputados: int | None) ->
             n += 1
         with open(out_path, "a", encoding="utf-8") as f:
             f.writelines(line + "\n" for line in lines)
-        with open(done_path, "a") as f:
+        with open(done_path, "a", encoding="utf-8") as f:
             f.write(f"{dep['id']}\n")
         total += n
         print(f"[{i}/{len(deputies)}] {dep['nome']} ({dep.get('siglaPartido')}-"
-              f"{dep.get('siglaUf')}): {n} speeches")
+              f"{dep.get('siglaUf')}): {n} speeches", flush=True)  # flush: visible in logs
 
-    print(f"Done. +{total} speeches → {out_path}")
+    print(f"Done. +{total} speeches -> {out_path}")
 
 
 def main() -> None:

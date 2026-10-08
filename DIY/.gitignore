@@ -1,6 +1,7 @@
 # Data and weights are large and reproducible — never commit them.
-data/
-checkpoints/
+# Leading "/" anchors to DIY/ so the llmbr/data/ code package is NOT ignored.
+/data/
+/checkpoints/
 *.bin
 *.pt
 *.safetensors

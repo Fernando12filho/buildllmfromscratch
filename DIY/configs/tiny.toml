@@ -1,0 +1,35 @@
+# Tiny model for the laptop MVP: ~11M parameters, minutes per run on an M3.
+# Sized for the small test corpus (~1.5M tokens). With this little data the model
+# will overfit after a few epochs — watch val loss and use best.pt, not last.pt.
+
+[paths]
+raw_dir       = "data/raw"
+interim_dir   = "data/interim"
+processed_dir = "data/processed"
+tokenizer     = "data/processed/tokenizer.json"
+checkpoints   = "checkpoints/tiny"
+
+[tokenizer]
+name      = "TucanoBR/Tucano-160m"
+eot_token = "</s>"
+
+[model]
+context_length = 256
+emb_dim        = 256
+n_heads        = 4
+n_layers       = 4
+dropout        = 0.2    # more dropout than small.toml: less data -> more regularization
+qkv_bias       = false
+
+[train]
+device        = "auto"
+batch_size    = 16
+grad_accum    = 1
+lr            = 1e-3    # small models tolerate (and need) a higher learning rate
+weight_decay  = 0.1
+warmup_steps  = 100
+max_steps     = 2000
+eval_interval = 200
+eval_iters    = 20
+save_interval = 500
+seed          = 1337

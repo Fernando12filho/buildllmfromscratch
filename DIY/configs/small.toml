@@ -9,7 +9,10 @@ tokenizer     = "data/processed/tokenizer.json"
 checkpoints   = "checkpoints"
 
 [tokenizer]
-vocab_size = 16000      # Portuguese-only corpus: 16k is plenty; GPT-2 uses 50257
+# Pretrained Brazilian Portuguese tokenizer (32k vocab) — see llmbr/tokenizer/__init__.py.
+# The model's vocab_size is read from the tokenizer, so it isn't set here.
+name      = "TucanoBR/Tucano-160m"
+eot_token = "</s>"      # separates speeches in train.bin / val.bin
 
 [model]
 context_length = 256    # tokens the model sees at once; raise to 512+ on the desktop GPU
