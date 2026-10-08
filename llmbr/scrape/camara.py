@@ -11,7 +11,7 @@ How it works:
 Resumable: finished deputies are recorded in leg_<N>.done, so Ctrl+C and
 re-running continues where it stopped instead of starting over.
 
-Examples (run from the DIY/ folder):
+Examples (run from the repository root):
   python -m llmbr.scrape.camara --legislatura 57 --max-deputados 3   # quick test
   python -m llmbr.scrape.camara --legislatura 57                     # full 2023–2027
   python -m llmbr.scrape.camara --legislatura 52 53 54 55 56 57      # 2003 → today

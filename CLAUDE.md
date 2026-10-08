@@ -6,24 +6,26 @@ for the full pipeline and setup.
 
 ## Hard rule: stay inside this directory
 
-**This `DIY/` directory is the whole project. Never create, modify, move or delete
-anything outside it** — no edits, no `rm`, no `mv`, no shell redirects (`>`), no
-`git checkout`/`git clean` affecting paths outside `DIY/`. That includes the parent repo
-folder `build-LLM/`, its `study/` and `agent/` folders, the home directory, and system
-or global Python locations (no `pip install` outside `DIY/.venv`).
+**This directory (the git repository root, locally named `DIY/`) is the whole project.
+Never create, modify, move or delete anything outside it** — no edits, no `rm`, no `mv`,
+no shell redirects (`>`), no `git checkout`/`git clean` affecting paths outside it. That
+includes the parent folder, the home directory, and system or global Python locations
+(no `pip install` outside `.venv`).
 
-- Reading files outside is fine when needed (e.g. `../study/gpt2.py` for reference).
-- `../study/` is the owner's LLM learning material. It stays in git but is NOT part of the
-  project: never edit it, and never import from it.
-- Temporary files go in `DIY/` (and get cleaned up) or the session scratchpad, not `/tmp`
-  or elsewhere.
-- If a task seems to need a change outside `DIY/`, stop and ask first.
+- Reading files outside is fine when needed.
+- `study/` is the owner's LLM learning material (read it for reference, e.g.
+  `study/gpt2.py`). It is in the repo but is NOT part of the `llmbr` package: never edit
+  it, and never import from it.
+- Temporary files go in this directory (and get cleaned up) or the session scratchpad,
+  not `/tmp` or elsewhere.
+- If a task seems to need a change outside this directory, stop and ask first.
+- Never add Claude as co-author/collaborator in commits, PRs or the README.
 
 ## Environment
 
-- Use the project venv only: `DIY/.venv` (macOS: `.venv/bin/python`, Windows:
+- Use the project venv only: `.venv` in the repo root (macOS: `.venv/bin/python`, Windows:
   `.venv\Scripts\python.exe`). Never install into the global Python.
-- Run everything from `DIY/` as modules: `python -m llmbr.<module>`.
+- Run everything from the repo root as modules: `python -m llmbr.<module>`.
 - Two machines: MacBook M3 16 GB (MPS, for development and small runs) and a Windows
   desktop with NVIDIA GPU (CUDA, for real training). Code must run on both.
 
@@ -53,6 +55,6 @@ python -m llmbr.generate --checkpoint checkpoints/tiny/best.pt --prompt "Senhor 
 - **Scrapers:** standard library + certifi only; polite rate limiting via
   `scrape/common.py`; resumable with `.done` files; same JSONL record keys across sources.
 - **Comments:** the owner is learning — explain the *why* (shapes, design choices), and
-  relate to `../study/` concepts where useful.
+  relate to `study/` concepts where useful.
 - **Never commit** `data/`, `checkpoints/`, `.venv/` (already in `.gitignore`).
 - Commit/push only when asked.
